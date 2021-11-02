@@ -21,15 +21,20 @@ from django.contrib import admin
 from checkout.views import CheckoutTestView, CheckoutAjaxView
 from dashboard.views import DashboardView
 from products.views import UserLibraryListView
+from products.urls import urlpatterns
 
 urlpatterns = [
     url(r'^$', DashboardView.as_view(), name='dashboard'),
     url(r'^test/$', CheckoutTestView.as_view(), name='test'),
     url(r'^checkout/$', CheckoutAjaxView.as_view(), name='checkout'),
-    url(r'^admin/', include(admin.site.urls)),
-    url(r'^products/', include("products.urls", namespace='products')),
-    url(r'^seller/', include("sellers.urls", namespace='sellers')),
-    url(r'^tags/',include("tags.urls", namespace='tags')),
+    #url(r'^admin/', include(admin.site.urls)),
+    url(r'^admin/', admin.site.urls),
+   #url(r'^products/', include("products.urls", namespace='products')),
+    #url(r'^products/', products.urls, name='products'),
+    #url(r'^seller/', include("sellers.urls", namespace='sellers')),
+    #url(r'^seller/',sellers, name='sellers'),
+    #url(r'^tags/',include("tags.urls", namespace='tags')),
+    #url(r'^tags/',tags, name='tags'),
     url(r'^library/', UserLibraryListView.as_view(), name='library'),
 ]
 

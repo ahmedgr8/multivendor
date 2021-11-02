@@ -15,8 +15,8 @@ class TagViewManager(models.Manager):
 
 
 class TagView(models.Model):
-	user = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, null=True)
-	tag = models.ForeignKey(Tag)
+	user = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, null=True,  on_delete=models.CASCADE)
+	tag = models.ForeignKey(Tag,  on_delete=models.CASCADE)
 	count = models.IntegerField(default=0)
 
 	objects = TagViewManager()

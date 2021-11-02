@@ -1,8 +1,10 @@
 import os
 from mimetypes import guess_type
 from django.conf import settings
-from django.core.servers.basehttp import FileWrapper
-from django.core.urlresolvers import reverse
+from wsgiref.util import FileWrapper
+#from django.core.servers.basehttp import FileWrapper
+#from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.db.models import Q, Avg, Count
 from django.http import Http404, HttpResponse, JsonResponse
 from django.shortcuts import render, get_object_or_404
@@ -100,7 +102,7 @@ class ProductUpdateView(ProductManagerMixin, SubmitBtnMixin, MultiSlugMixin, Upd
 
     def get_initial(self):
         initial = super(ProductUpdateView, self).get_initial()
-        print initial
+        #print initial
         tags = self.get_object().tag_set.all()
         initial["tags"] = ", ".join([x.title for x in tags])
         """
@@ -237,7 +239,7 @@ def create_view(request):
     # Form
     form = ProductModelForm(request.POST or None, request.FILES or None)
     if form.is_valid():
-        print form.cleaned_data.get("publish")
+        #print form.cleaned_data.get("publish")
         instance = form.save(commit=False)
         instance.sale_price = instance.price
         instance.save()
@@ -284,7 +286,7 @@ def detail_view(request, object_id=None):
     return render(request, template, context)
 
 def list_view(request):
-    print request
+    #print request
     queryset = Product.objects.all()
     template = "list_view.html"
     context = {

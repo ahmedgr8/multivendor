@@ -2,7 +2,7 @@ from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 from django.db import models
 from django.db.models.signals import pre_save, post_save
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.utils.text import slugify
 
 from sellers.models import SellerAccount
@@ -11,7 +11,7 @@ def download_media_location(instance, filename):
     return "%s/%s" %(instance.slug, filename)
 
 class Product(models.Model):
-    seller = models.ForeignKey(SellerAccount)
+    seller = models.ForeignKey(SellerAccount, on_delete=models.CASCADE,)
     media = models.ImageField(blank=True,
         null=True,
         upload_to=download_media_location,
@@ -82,7 +82,7 @@ THUMB_CHOICES = (
     ("micro", "Micro"),
 )
 class Thumbnail(models.Model):
-    product = models.ForeignKey(Product)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE,)
     type = models.CharField(max_length=20, choices=THUMB_CHOICES, default='hd')
     height = models.CharField(max_length=20, null=True, blank=True)
     width = models.CharField(max_length=20, null=True, blank=True)
@@ -158,7 +158,7 @@ post_save.connect(product_post_save_receiver, sender=Product)
 
 
 class MyProducts(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     products = models.ManyToManyField(Product, blank=True)
 
     def __unicode__(self):
@@ -169,8 +169,8 @@ class MyProducts(models.Model):
         verbose_name_plural = "My Products"
 
 class ProductRating(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL)
-    product = models.ForeignKey(Product)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,  on_delete=models.CASCADE)
+    product = models.ForeignKey(Product,  on_delete=models.CASCADE)
     rating = models.IntegerField(null=True, blank=True)
     verified = models.BooleanField(default=False)
 
@@ -178,7 +178,7 @@ class ProductRating(models.Model):
         return "%s" %(self.rating)
 
 class CuratedProducts(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     section_name = models.CharField(max_length=120)
     products = models.ManyToManyField(Product, blank=True)
     active = models.BooleanField(default=True)
